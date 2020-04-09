@@ -1,0 +1,19 @@
+<% if flash[:notice] %>
+    <div class="flash">
+        <%= flash[:notice] %>
+    </div>
+<% end %>
+
+    <div>
+        <strong>Title:</strong><%= @book.title %>
+    </div>
+
+    <p>
+        <div>
+            <strong>Body:</strong><%= @book.body %>
+        </div>
+    </p>
+
+<% if @book.user == current_user %>
+    <%= link_to "削除", book_path(@book), method: :delete %>
+<% end %>

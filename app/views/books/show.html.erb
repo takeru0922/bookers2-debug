@@ -4,16 +4,18 @@
     </div>
 <% end %>
 
-    <div>
-        <strong>Title:</strong><%= @book.title %>
-    </div>
+<h1>Book detail</h1>
 
-    <p>
-        <div>
-            <strong>Body:</strong><%= @book.body %>
-        </div>
-    </p>
+    <%= @book.title %>
+
+    <%= @book.body %>
+
+
 
 <% if @book.user == current_user %>
-    <%= link_to "削除", book_path(@book), method: :delete %>
+
+    <%= link_to "Edit", edit_book_path(@book) %>
+
+    <%= link_to "Destroy", book_path(@book), method: :delete, "data-confirm" => "本当に削除しますか？" %>
+
 <% end %>

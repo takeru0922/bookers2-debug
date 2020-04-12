@@ -5,12 +5,24 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @books = @user.books.page(params[:page]).reverse_order
+  end
+
+  def edit
+    @user = User.find(params[:id])
   end
 
   def update
     @user = User.find(params[:id])
     @user.update(user_params)
     redirect_to user_path(@user.id)
+  end
+
+  def create
+    @user = User.new(
+      name: params[:name]
+      email: params[:email]
+      image_name: "default_user.jpg" 
   end
 
   private 

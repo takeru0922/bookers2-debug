@@ -14,7 +14,13 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       ## Rememberable
       t.datetime :remember_created_at
 
+
+      #名前用カラム
       t.string :name
+      #自己紹介文カラム
+      t.text :introduction
+      #画像保存用カラム
+      t.string :profile_image_id
       t.timestamps null: false
     end
 

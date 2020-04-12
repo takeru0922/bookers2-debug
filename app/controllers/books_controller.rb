@@ -1,46 +1,67 @@
 class BooksController < ApplicationController
-    def index
-        @books = Book.all
-        @book = Book.new
+    before_action :authenticate_user!, except: [:top,:about]
+    before_action :authbook, {only:[:edit]}
+
+    def top
     end
 
-    def create
-        @book = Book.new(book_params)
-        @book.user_id = current_user.id
-        if @book.save
-            flash[:notice] = "successfully"
-            redirect_to book_path(@book.id)
-        else 
-            @books = Book.all
-            render action: :index
-        end
+    def about
+    end
+
+    def books
+        @user = current_user
+        @book = Book.new
+        @books = Book.all
     end
 
     def show
-        @book = Book.find(params[:id])
+        users = Book.find(params[:id])
+        @user = users.user
+        @book = Book.new
+        @books = Book.find(params[:id])
     end
 
     def edit
         @book = Book.find(params[:id])
     end
 
-    def update
-        book = Book.find(params[:id])
-        book.update(book_params)
-        flash[:notice] = "successfully"
-        
-        redirect_to book_path(book)
+    def create
+        @user = User.find(current_user.id)
+        @book = current_user.books.new(books_params)
+        @books = Book.all
+        if @book.save
+            flash[:message] = "You have creatad book successfully."
+            redirect_to book_path(@book)
+        else
+            render :books
+        end
     end
 
     def destroy
-        @book = Book.find(params[:id])
-        @book.destroy
+        book = Book.find(params[:id])
+        book.destroy
         redirect_to books_path
     end
 
-    private
-    def book_params
-        params.require(:book).permit(:title, :body)
+    def update
+        @book = Book.find(params[:id])
+        if @book.update(books_params)
+            flash[:message] = "You have updated book successfully."
+            redirect_to book_path(@book)
+        else
+            render :edit
+        end
     end
 
+    private
+        def books_params
+            params.require(:book).permit(:user_id,:title,:body)
+        end
+
+        def authbook
+            book = Book.find(params[:id])
+            if book.user_id != current_user.id
+                redirect_to books_path
+            end
+        end
 end

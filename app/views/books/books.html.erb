@@ -16,16 +16,17 @@
                     <% @books.each do |f| %>
                     <tr>
 
-                    <th>
-                    <%= link_to user_path(f.id) do %>
-                    <%= attachment_image_tag @user, :profile_image, :fill,60,60, size: "100x100", format:"jpeg",fallback:"no_image.jpg" %></th>
-                    <% end %>
+                        <th>
+                        <%= link_to user_path(f.id) do %>
+                        <%= attachment_image_tag User.find(f.user_id), :profile_image, :fill,60,60, size: "100x100", format:"jpeg",fallback:"no_image.jpg" %>
+                        </th>
+                        <% end %>
                         <th><%= link_to f.title,book_path(f.id) %></th>
                         <td><%= f.body %></td>
                     </tr>
                     <% end %>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

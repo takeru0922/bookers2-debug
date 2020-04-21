@@ -8,12 +8,6 @@ class BooksController < ApplicationController
     def about
     end
 
-    def books
-        @user = current_user
-        @book = Book.new
-        @books = Book.all
-    end
-
     def show
         users = Book.find(params[:id])
         @user = users.user
@@ -21,36 +15,40 @@ class BooksController < ApplicationController
         @books = Book.find(params[:id])
     end
 
-    def edit
-        @book = Book.find(params[:id])
+    def books
+        @user = current_user
+        @book = Book.new
+        @books = Book.all#一覧表示するためにBookモデルの情報を全てくださいのall
     end
 
     def create
         @user = User.find(current_user.id)
-        @book = current_user.books.new(books_params)
+        @book = current_user.books.new(books_params) #Bookモデルのテーブルを使用しているのでbookコントローラで保存する。
         @books = Book.all
-        if @book.save
-            flash[:message] = "You have creatad book successfully."
-            redirect_to book_path(@book)
+        if @book.save #入力されたデータをdbに保存する。
+            redirect_to book_path(@book), notice: "successfully created book!"#保存された場合の移動先を指定。
         else
             render :books
+        end
+    end
+
+    def edit
+        @book = Book.find(params[:id])
+    end
+
+    def update
+        @book = Book.find(params[:id])
+        if @book.update(books_params)
+            redirect_to book_path(@book), notice: "successfully updated book!"
+        else #if文でエラー発生時と正常時のリンク先を枝分かれにしている。
+            render :edit
         end
     end
 
     def destroy
         book = Book.find(params[:id])
         book.destroy
-        redirect_to books_path
-    end
-
-    def update
-        @book = Book.find(params[:id])
-        if @book.update(books_params)
-            flash[:message] = "You have updated book successfully."
-            redirect_to book_path(@book)
-        else
-            render :edit
-        end
+        redirect_to books_path, notice: "successfully delete book!"
     end
 
     private

@@ -1,26 +1,19 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+### テスト手順の自動化
+gemを入れて、specファイルを移動して、テストを実行するコマンドを打つという手順をまとめたcheck.shというファイルを作成した
+アプリケーションのルートディレクトリにおいて
+bash check.sh
+というコマンドを打つと最後まで自動で終了する
+ディレクトリが野原のディレクトリにあっているため、自分で修正が必要
 
-* Ruby version
+### 実行コマンド
+bundle exec rspec spec/ --format documentation
 
-* System dependencies
+### 注意
+カラム名が違うとほとんどのテストに失敗してしまうが、このコマンドですべてのファイルの文字列を変更することができる
+例はopinionというカラム名で作られていたため、それをすべてbodyというカラム名に変更した
+find . -type f | xargs sed -i 's/opinion/body/g'
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-Test finish
+一回テストを試していると、テスト用のデータベースtest.sqlite3ができているため、カラム名を変更したのちに再びやる時は
+rm db/test.sqlite3によって、ファイルを削除してから実行する
